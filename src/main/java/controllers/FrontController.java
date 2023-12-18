@@ -13,6 +13,10 @@ import actions.ActionBase;
 import actions.UnknownAction;
 import constants.ForwardConst;
 
+/**
+ * フロントコントローラ
+ *
+ */
 @WebServlet("/")
 public class FrontController extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -21,17 +25,29 @@ public class FrontController extends HttpServlet {
         super();
     }
 
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //パラメーターに該当するActionクラスのインスタンス
-        ActionBase action = getAction(request,response);
+        //パラメータに該当するActionクラスのインスタンス
+        ActionBase action = getAction(request, response);
 
         //サーブレットコンテキスト、リクエスト、レスポンスをActionインスタンスのフィールドに設定
         action.init(getServletContext(), request, response);
 
         //Actionクラスの処理を呼び出し
         action.process();
+    }
+
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doGet(request, response);
     }
 
     /**
@@ -41,7 +57,6 @@ public class FrontController extends HttpServlet {
      * @param response レスポンス
      * @return
      */
-
     @SuppressWarnings({ "rawtypes", "unchecked" }) //コンパイラ警告を抑制
     private ActionBase getAction(HttpServletRequest request, HttpServletResponse response) {
         Class type = null;
@@ -68,4 +83,5 @@ public class FrontController extends HttpServlet {
         }
         return action;
     }
+
 }
